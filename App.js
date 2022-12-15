@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Icon} from "@rneui/themed";
 
@@ -7,13 +7,16 @@ const text_color = '#03DAC5';
 const bar_color = '#3700B3';
 const button_color = '#BB86FC';
 
+
 const Spacer = ({heigth = 15}) => {
   return(
       <View style={{marginTop: heigth}}/>
   )
 }
 
-function Task({TaskName = "Undefine Task"}) {
+function Task({TaskName = "Undefine Task", taskKey, myArray}) {
+
+
   return(
       <View style={styles.taskContainer}>
         <View style={styles.leftBox}>
@@ -24,7 +27,9 @@ function Task({TaskName = "Undefine Task"}) {
             name={'done-outline'}
             size={20}
             color={button_color}
-            onPress={() => alert("Bravo tati")}
+            onPress={() => {
+              delete myArray[taskKey];
+            }}
         />
       </View>
   )
@@ -33,10 +38,9 @@ function Task({TaskName = "Undefine Task"}) {
 
 export default function App() {
 
-  const [text, onChangeText] = React.useState("Useless Text");
+  const [text, setText] = React.useState("Useless Text");
+  const [array, setArray] = React.useState([]);
   let variabila;
-
-
 
   return (
 
@@ -58,14 +62,21 @@ export default function App() {
             name={'done-all'}
             color={button_color}
             size={25}
-            onPress={() => {onChangeText(variabila)}}
+            onPress={() => {
+              setText(variabila)
+              array.push({name: variabila})
+            }}
         />
       </View>
-
       <View style={styles.downBox}>
         <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center'}} style={styles.scrollView}>
-            <Task TaskName={text}/>
-            <Task/>
+          {
+            array.map((val, key) => {
+              return (
+                  <Task TaskName={val.name} taskKey={key} myArray = {array} key={key}/>
+              );
+            })
+          }
         </ScrollView>
       </View>
     </View>
