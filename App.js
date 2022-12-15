@@ -13,12 +13,11 @@ const Spacer = ({heigth = 15}) => {
   )
 }
 
-function Task() {
+function Task({TaskName = "Undefine Task"}) {
   return(
       <View style={styles.taskContainer}>
         <View style={styles.leftBox}>
-          <Text style={{fontSize: 20, color: text_color}}>Fa bani cat de repede
-            si dupa mai vad</Text>
+          <Text style={{fontSize: 20, color: text_color}}>{TaskName}</Text>
         </View>
           <Icon
             reverse
@@ -31,11 +30,17 @@ function Task() {
   )
 }
 
+
 export default function App() {
 
   const [text, onChangeText] = React.useState("Useless Text");
+  let variabila;
+
+
 
   return (
+
+
     <View style={{flex: 1}}>
       <View style={styles.upBox}>
         <Text style={{fontWeight: 'bold', fontSize: 32, color: text_color}}>My Task</Text>
@@ -45,7 +50,7 @@ export default function App() {
       <View style={styles.midBox}>
         <TextInput
             style={styles.textBox}
-            onChangeText={onChangeText}
+            onChangeText={(text) => {variabila = text}}
             placeholder='New Task'
         />
         <Icon
@@ -53,20 +58,20 @@ export default function App() {
             name={'done-all'}
             color={button_color}
             size={25}
-            onPress={() => alert("U gay")}
+            onPress={() => {onChangeText(variabila)}}
         />
       </View>
 
       <View style={styles.downBox}>
         <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center'}} style={styles.scrollView}>
-            <Task/>
-            <Task/>
+            <Task TaskName={text}/>
             <Task/>
         </ScrollView>
       </View>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   upBox: {
