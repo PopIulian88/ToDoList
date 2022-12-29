@@ -14,21 +14,24 @@ const Spacer = ({heigth = 15}) => {
   )
 }
 
-function Task({TaskName = "Undefine Task", taskKey, myArray}) {
+export function Task({TaskName, taskKey, setArray, array}) {
 
+  const removeTask = () => {
+      setArray((current) => current.filter((element) => element.name !== array[taskKey].name))
+  }
 
   return(
       <View style={styles.taskContainer}>
         <View style={styles.leftBox}>
           <Text style={{fontSize: 20, color: text_color}}>{TaskName}</Text>
         </View>
-          <Icon
+        <Icon
             reverse
             name={'done-outline'}
             size={20}
             color={button_color}
             onPress={() => {
-              delete myArray[taskKey];
+              removeTask()
             }}
         />
       </View>
@@ -42,44 +45,48 @@ export default function App() {
   const [array, setArray] = React.useState([]);
   let variabila;
 
+
+
   return (
 
 
-    <View style={{flex: 1}}>
-      <View style={styles.upBox}>
-        <Text style={{fontWeight: 'bold', fontSize: 32, color: text_color}}>My Task</Text>
-        <Text style={{color: '#fff'}}>Everyone has a Lambo or a Ferrari, it’s easy.</Text>
-      </View>
+      <View style={{flex: 1}}>
+        <View style={styles.upBox}>
+          <Text style={{fontWeight: 'bold', fontSize: 32, color: text_color}}>My Task</Text>
+          <Text style={{color: '#fff'}}>Everyone has a Lambo or a Ferrari, it’s easy.</Text>
+        </View>
 
-      <View style={styles.midBox}>
-        <TextInput
-            style={styles.textBox}
-            onChangeText={(text) => {variabila = text}}
-            placeholder='New Task'
-        />
-        <Icon
-            reverse
-            name={'done-all'}
-            color={button_color}
-            size={25}
-            onPress={() => {
-              setText(variabila)
-              array.push({name: variabila})
-            }}
-        />
+        <View style={styles.midBox}>
+          <TextInput
+              style={styles.textBox}
+              onChangeText={(text) => {variabila = text}}
+              placeholder='New Task'
+          />
+          <Icon
+              reverse
+              name={'done-all'}
+              color={button_color}
+              size={25}
+              onPress={() => {
+                  if(variabila) {
+                      setText(variabila)
+                      array.push({name: variabila})
+                  }
+              }}
+          />
+        </View>
+        <View style={styles.downBox}>
+          <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center'}} style={styles.scrollView}>
+            {
+              array.map((val, key) => {
+                return (
+                    <Task TaskName={val.name} taskKey={key} key={key} setArray={setArray} array={array}/>
+                );
+              })
+            }
+          </ScrollView>
+        </View>
       </View>
-      <View style={styles.downBox}>
-        <ScrollView contentContainerStyle={{ justifyContent: 'center', alignItems: 'center'}} style={styles.scrollView}>
-          {
-            array.map((val, key) => {
-              return (
-                  <Task TaskName={val.name} taskKey={key} myArray = {array} key={key}/>
-              );
-            })
-          }
-        </ScrollView>
-      </View>
-    </View>
   );
 }
 
@@ -91,6 +98,8 @@ const styles = StyleSheet.create({
     backgroundColor: bar_color,
     justifyContent: 'center',
     borderRadius: 20,
+      shadowColor: 'blue',
+      elevation: 20,
   },
 
   midBox: {
@@ -103,13 +112,15 @@ const styles = StyleSheet.create({
   },
 
   textBox: {
-    borderWidth: 1,
-    backgroundColor: '#C0C0C0',
-    height: 50,
-    width: '70%',
-    margin: 12,
-    padding: 10,
-    borderRadius: 20,
+      backgroundColor: '#C0C0C0',
+      height: 50,
+      width: '70%',
+      margin: 12,
+      padding: 10,
+      borderRadius: 20,
+
+      shadowColor: "#000",
+      elevation: 15,
   },
 
   downBox: {
@@ -134,6 +145,10 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#F0F4C3',
     borderRadius: 25,
+
+      shadowColor: "#000",
+
+      elevation: 10,
   },
 
 });
